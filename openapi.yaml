@@ -1,0 +1,719 @@
+openapi: 3.0.3
+info:
+  title: Gestion de Turnos
+  description: 'App que permite gestionar turnos para evento unicos y recurrentes para diferentes organizaciones'
+  contact:
+    email: criscuelieduardo@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: organizacion
+    description: gestiones de las organizaciones
+  - name: persona
+    description: gestion de personas
+  - name: evento
+    description: gestion de eventos y turnos
+paths:
+  /organizacion:
+    post:
+      tags:
+        - organizacion
+      summary: Agrega una nueva organizacion
+      operationId: addOrganization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organizacion'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'          
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    patch:
+      tags:
+        - organizacion
+      summary: Modifica una organizacion
+      operationId: updateOrganization
+      parameters:
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la organizacion
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organizacion'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    delete:
+      tags:
+        - organizacion
+      summary: Elimina una organizacion
+      operationId: deleteOrganization
+      parameters:
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la organizacion
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'          
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    get:
+      tags:
+        - organizacion
+      summary: Muestra todas las organizaciones
+      operationId: getOrganizations
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaListaOrganizaciones'
+        '404':
+          description: No hay turnos registrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /organizacion/{filtro}:
+    get:
+      tags:
+        - organizacion
+      summary: Muestra una organizacion por su nombre o su cuit
+      operationId: getOrganizationByFilter
+      parameters:
+        - name: filtro
+          in: path
+          description: nombre o cuit de la organizacion
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaOrganizacion'          
+        '404':
+          description: No hay turnos registrados para la organizacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /evento:
+    post:
+      tags:
+        - evento
+      summary: Agrega un evento
+      operationId: addEvent
+      parameters:
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la organizacion
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    patch:
+      tags:
+        - evento
+      summary: Modifica un evento
+      operationId: updateEvent
+      parameters:
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la organizacion
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '404':
+          description: Evento inexistente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    delete:
+      tags:
+        - evento
+      summary: Elimina un evento
+      operationId: deleteEvent
+      parameters:
+        - name: nombreEvento
+          in: header
+          description: nombre del evento
+          required: true
+          schema:
+            type: string
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la organizacion
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '404':
+          description: Evento inexistente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /evento/{cuit}/turnos:
+    get:
+      tags:
+        - evento
+      summary: Muestra todos los turnos de los eventos de la organizacion
+      operationId: getTurns
+      parameters:
+        - name: cuit
+          in: path
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: activo
+          in: query
+          description: estado del turno
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaTurnos'          
+        '404':
+          description: No hay turnos registrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /persona:
+    post:
+      tags:
+        - persona
+      summary: Agrega una nueva persona
+      operationId: addPerson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Persona'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaPersonaRegistrada'          
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    patch:
+      tags:
+        - persona
+      summary: Modifica los datos de una persona
+      operationId: updatePerson
+      parameters:
+        - name: dni
+          in: header
+          description: dni de la persona
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la persona
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaConClave'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'          
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    delete:
+      tags:
+        - persona
+      summary: Baja la cuenta de una persona
+      operationId: deletePerson
+      parameters:
+        - name: dni
+          in: header
+          description: dni de la persona
+          required: true
+          schema:
+            type: string
+        - name: clave
+          in: header
+          description: clave de la persona
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'          
+        '412':
+          description: Error de identificacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+    get:
+      tags:
+        - persona
+      summary: Muestra la lista de usuarios registrados
+      operationId: getPersons
+      parameters:
+        - name: apellido
+          in: query
+          description: filtro por apellidos
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaListaPersonas'          
+        '404':
+          description: No hay personas registradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /persona/{dni}:
+    get:
+      tags:
+        - persona
+      summary: Muestra un usuario especifico
+      operationId: getPerson
+      parameters:
+        - name: dni
+          in: path
+          description: dni de la persona
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaPersona'          
+        '404':
+          description: No hay personas registradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+  /persona/turno:
+    post:
+      tags:
+        - persona
+      summary: Saca un turno para una persona
+      operationId: addTurn
+      parameters:
+        - name: cuit
+          in: header
+          description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: evento
+          in: header
+          description: nombre del evento
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Turno'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '404':
+          description: Evento inexistente para la organizacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '405':
+          description: Entrada invalida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+components:
+  schemas:
+    Organizacion:
+      type: object
+      properties:
+        nombre:
+          type: string
+        cuit:
+          type: number
+        direccion:
+          type: string
+        telefono:
+          type: number
+        email:
+          type: string
+        clave:
+          type: string
+    Evento:
+      type: object
+      properties:
+        nombre:
+          type: string
+        ubicacion:
+          type: string
+        fecha:
+          type: string
+        tipo:
+          type: string
+          enum:
+            - UNICO
+            - RECURRENTE
+    Persona:
+      type: object
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: number
+    PersonaConClave:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Persona'
+      properties:
+        clave: 
+          type: string
+    Turno:
+      type: object
+      properties:
+        fecha:
+          type: string
+        hora:
+          type: string
+        persona:
+          $ref: '#/components/schemas/Persona'
+    Respuesta:
+      type: object
+      properties:
+        status:
+          type: number
+        descripcion:
+          type: string
+    RespuestaPersonaRegistrada:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        clave:
+          type: string
+    RespuestaListaPersonas:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        personas:
+          type: array
+          items:  
+            $ref: '#/components/schemas/PersonaConClave'
+    RespuestaPersona:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        persona:
+          $ref: '#/components/schemas/PersonaConClave'
+    RespuestaTurnos:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        turnos:
+          type: array
+          items:  
+            $ref: '#/components/schemas/Turno'
+    RespuestaListaOrganizaciones:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        organizaciones:
+          type: array
+          items:  
+            $ref: '#/components/schemas/Organizacion'
+    RespuestaOrganizacion:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+      properties:
+        organizacion:
+          $ref: '#/components/schemas/Organizacion'
