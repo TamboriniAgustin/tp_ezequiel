@@ -16,7 +16,9 @@ CREATE TABLE organizacion(
     fecha_alta DATE NOT NULL,
     clave VARCHAR(60) NOT NULL,
     PRIMARY KEY(cuit),
-    UNIQUE(nombre, direccion, email)
+    UNIQUE(nombre),
+	UNIQUE(direccion),
+	UNIQUE(email)
 );
 
 CREATE TABLE tipo_evento(

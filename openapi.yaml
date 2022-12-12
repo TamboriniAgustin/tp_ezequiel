@@ -46,7 +46,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Respuesta'
-    patch:
+    put:
       tags:
         - organizacion
       summary: Modifica una organizacion

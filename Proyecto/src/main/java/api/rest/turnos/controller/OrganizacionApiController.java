@@ -9,6 +9,7 @@ import api.rest.turnos.service.OrganizacionService;
 import api.rest.turnos.validator.OrganizacionValidator;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,10 @@ public class OrganizacionApiController implements OrganizacionApi {
     @Autowired
     private OrganizacionService serviceOrganizacion;
 
+    /*
+     * POST /organizacion: 
+     * agrega una nueva organización al sistema 
+    */
     public ResponseEntity<Respuesta> addOrganization(Organizacion body) {
     	log.info("[Agregar organización] Se recibió una solicitud");
     	
@@ -42,20 +47,86 @@ public class OrganizacionApiController implements OrganizacionApi {
     	
         return new ResponseEntity<Respuesta>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * DELETE /organizacion: 
+     * elimina una organización del sistema 
+    */
     public ResponseEntity<Respuesta> deleteOrganization(String cuit, String clave) {
-        return new ResponseEntity<Respuesta>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Eliminar organización] Se recibió una solicitud");
+    	
+    	//Se validan los datos de entrada
+    	validatorOrganizacion.validateOrganizationData(cuit, clave);
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	serviceOrganizacion.deleteOrganization(cuit, clave);
+    	log.info("[Eliminar organización] Organización {} eliminada con éxito", cuit);
+    	
+    	Respuesta response = new Respuesta();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("La organización se eliminó correctamente");
+    	
+        return new ResponseEntity<Respuesta>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * GET /organizacion/{filtro}: 
+     * trae una organización buscando por nombre o cuit 
+    */
     public ResponseEntity<RespuestaOrganizacion> getOrganizationByFilter(String filtro) {
-        return new ResponseEntity<RespuestaOrganizacion>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Mostrar organización] Se recibió una solicitud");
+    	
+    	//Se validan los datos de entrada
+    	validatorOrganizacion.validateFilterData(filtro);
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	Organizacion organization = serviceOrganizacion.getOrganizationByCuitOrName(filtro);
+    	log.info("[Mostrar organización] Organización {}(Cuit: {}) eliminada con éxito", organization.getNombre(), organization.getCuit());
+    	
+    	RespuestaOrganizacion response = new RespuestaOrganizacion();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("Organización listada correctamente");
+    	response.setOrganizacion(organization);
+    	
+        return new ResponseEntity<RespuestaOrganizacion>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * GET /organizacion: 
+     * trae todas las organizaciones
+    */
     public ResponseEntity<RespuestaListaOrganizaciones> getOrganizations() {
-        return new ResponseEntity<RespuestaListaOrganizaciones>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Mostrar organizaciones] Se recibió una solicitud");
+    	
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	List<Organizacion> organizations = serviceOrganizacion.getOrganizations();
+    	log.info("[Mostrar organizaciones] {} organizaciones obtenidas con éxito", organizations.size());
+    	
+    	RespuestaListaOrganizaciones response = new RespuestaListaOrganizaciones();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("Organizaciones listadas correctamente");
+    	response.setOrganizaciones(organizations);
+    	
+        return new ResponseEntity<RespuestaListaOrganizaciones>(response, HttpStatus.OK);
     }
 
+    /*
+     * PUT /organizacion: 
+     * actualiza la información de una organización del sistema 
+    */
     public ResponseEntity<Respuesta> updateOrganization(String cuit, String clave, Organizacion body) {
-        return new ResponseEntity<Respuesta>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Actualizar organización] Se recibió una solicitud");
+    	
+    	//Se validan los datos de entrada
+    	validatorOrganizacion.validateOrganizationData(cuit, clave);
+    	validatorOrganizacion.validateOrganizationData(body);
+    	log.info("[Actualizar organización] Información para la actualización de la organización {}(Cuit: {}) validada correctamente", body.getNombre(), body.getCuit());
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	serviceOrganizacion.updateOrganization(cuit, clave, body);
+    	log.info("[Actualizar organización] Organización {}(Cuit: {}) actualizada con éxito", body.getNombre(), body.getCuit());
+    	
+    	Respuesta response = new Respuesta();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("La organización se actualizó correctamente");
+    	
+        return new ResponseEntity<Respuesta>(response, HttpStatus.OK);
     }
 }
