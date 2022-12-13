@@ -8,12 +8,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import api.rest.turnos.db.mapper.OrganizacionMapperDB;
+import api.rest.turnos.db.mapper.WrapperOrganizacionMapperDB;
 import api.rest.turnos.exception.EntradaDuplicadaException;
 import api.rest.turnos.exception.IdentificacionErroneaException;
 import api.rest.turnos.exception.ObjetoNoListadoException;
 import api.rest.turnos.model.swagger.Organizacion;
 import api.rest.turnos.util.DateUtils;
+import api.rest.turnos.wrapper.OrganizacionWrapper;
 
 @Repository
 public class OrganizacionRepository {
@@ -22,11 +23,11 @@ public class OrganizacionRepository {
 	
 	private static final String INSERT_ORGANIZACION = "INSERT INTO organizacion(nombre, cuit, direccion, telefono, email, "
 			+ "fecha_alta, clave) VALUES(?, ?, ?, ?, ?, ?, PASSWORD(?))";
-	private static final String SELECT_IDENTIFICAR_ORGANIZACION = "SELECT nombre, cuit, direccion, telefono, email "
+	private static final String SELECT_IDENTIFICAR_ORGANIZACION = "SELECT nombre, cuit, direccion, telefono, email, fecha_alta "
 			+ " FROM organizacion WHERE cuit = ? AND clave = PASSWORD(?)";
-	private static final String SELECT_ORGANIZACIONES = "SELECT nombre, cuit, direccion, telefono, email "
+	private static final String SELECT_ORGANIZACIONES = "SELECT nombre, cuit, direccion, telefono, email, fecha_alta "
 			+ " FROM organizacion";
-	private static final String SELECT_ORGANIZACION_POR_NOMBRE_O_CUIT = "SELECT nombre, cuit, direccion, telefono, email "
+	private static final String SELECT_ORGANIZACION_POR_NOMBRE_O_CUIT = "SELECT nombre, cuit, direccion, telefono, email, fecha_alta "
 			+ " FROM organizacion WHERE cuit = ? OR nombre = ?";
 	private static final String UPDATE_ORGANIZACION = "UPDATE organizacion SET nombre = ?, cuit = ?, direccion = ?, "
 			+ "telefono = ?, email = ?, clave = PASSWORD(?) WHERE cuit = ?";
@@ -45,19 +46,19 @@ public class OrganizacionRepository {
 	}
 	
 	//Operaciones Select
-	public Organizacion selectOrganizationWithCredentials(String cuit, String clave) {
+	public OrganizacionWrapper selectOrganizationWithCredentials(String cuit, String clave) {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_IDENTIFICAR_ORGANIZACION, new Object[]{cuit, clave}, new OrganizacionMapperDB());
+			return jdbcTemplate.queryForObject(SELECT_IDENTIFICAR_ORGANIZACION, new Object[]{cuit, clave}, new WrapperOrganizacionMapperDB());
 		} catch(EmptyResultDataAccessException e) {
 			throw new IdentificacionErroneaException("Las credenciales de acceso a la organización son inválidas");
 		}
 	}
-	public List<Organizacion> selectOrganizations() {
-		return jdbcTemplate.query(SELECT_ORGANIZACIONES, new OrganizacionMapperDB());
+	public List<OrganizacionWrapper> selectOrganizations() {
+		return jdbcTemplate.query(SELECT_ORGANIZACIONES, new WrapperOrganizacionMapperDB());
 	}
-	public Organizacion selectOrganizationByCuitOrName(String filter) {
+	public OrganizacionWrapper selectOrganizationByCuitOrName(String filter) {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_ORGANIZACION_POR_NOMBRE_O_CUIT, new Object[]{filter, filter}, new OrganizacionMapperDB());
+			return jdbcTemplate.queryForObject(SELECT_ORGANIZACION_POR_NOMBRE_O_CUIT, new Object[]{filter, filter}, new WrapperOrganizacionMapperDB());
 		} catch(EmptyResultDataAccessException e) {
 			throw new ObjetoNoListadoException("Organización inexistente");
 		}

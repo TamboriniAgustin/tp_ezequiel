@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import api.rest.turnos.model.swagger.Organizacion;
 import api.rest.turnos.repository.OrganizacionRepository;
+import api.rest.turnos.wrapper.OrganizacionWrapper;
 
 @Service
 public class OrganizacionService {
@@ -32,12 +33,12 @@ public class OrganizacionService {
 		repositoryOrganizacion.deleteOrganization(cuit);
 	}
 	
-	public List<Organizacion> getOrganizations() {
+	public List<OrganizacionWrapper> getOrganizations() {
 		//Se consultan las organizaciones existentes en la base de datos
 		return repositoryOrganizacion.selectOrganizations();
 	}
 	
-	public Organizacion getOrganizationByCuitOrName(String filter) {
+	public OrganizacionWrapper getOrganizationByCuitOrName(String filter) {
 		//Se consulta la organización solicitada
 		return repositoryOrganizacion.selectOrganizationByCuitOrName(filter);
 	}

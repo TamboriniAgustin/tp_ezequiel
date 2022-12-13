@@ -17,4 +17,9 @@ public class ValidationUtils {
 		String passwordRegExp = "^[a-zA-Z0-9]{20,40}$";
 		return Pattern.compile(passwordRegExp).matcher(text).matches();
 	}
+	
+	public static boolean stringWithDateTimeFormat(String text) {
+		String dateRegExp = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9] [0-9]{2}:[0-9]{2}$";
+		return Pattern.compile(dateRegExp).matcher(text).matches();
+	}
 }

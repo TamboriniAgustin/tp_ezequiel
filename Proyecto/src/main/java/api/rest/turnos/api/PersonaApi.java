@@ -93,6 +93,6 @@ public interface PersonaApi {
         @ApiResponse(responseCode = "412", description = "Error de identificacion", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Respuesta.class))),
         @ApiResponse(responseCode = "500", description = "Error del servidor", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Respuesta.class))) 
     })
-    @RequestMapping(value = "/persona", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.PATCH)
+    @RequestMapping(value = "/persona", produces = { "application/json" }, consumes = { "application/json" }, method = RequestMethod.PUT)
     ResponseEntity<Respuesta> updatePerson(@Parameter(in = ParameterIn.HEADER, description = "dni de la persona" ,required=true,schema=@Schema()) @RequestHeader(value="dni", required=true) String dni, @Parameter(in = ParameterIn.HEADER, description = "clave de la persona" ,required=true,schema=@Schema()) @RequestHeader(value="clave", required=true) String clave, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody PersonaConClave body);
 }

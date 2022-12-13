@@ -236,12 +236,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Respuesta'
-    patch:
+    put:
       tags:
         - evento
       summary: Modifica un evento
       operationId: updateEvent
       parameters:
+        - name: nombreEvento
+          in: header
+          description: nombre del evento
+          required: true
+          schema:
+            type: string
         - name: cuit
           in: header
           description: cuit de la organizacion
@@ -408,7 +414,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Respuesta'
-    patch:
+    put:
       tags:
         - persona
       summary: Modifica los datos de una persona
@@ -708,12 +714,20 @@ components:
       properties:
         organizaciones:
           type: array
-          items:  
-            $ref: '#/components/schemas/Organizacion'
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Organizacion'
+            properties:
+              fechaAlta:
+                type: string
     RespuestaOrganizacion:
       type: object
       allOf:
         - $ref: '#/components/schemas/Respuesta'
       properties:
         organizacion:
-          $ref: '#/components/schemas/Organizacion'
+          allOf:
+            - $ref: '#/components/schemas/Organizacion'
+          properties:
+            fechaAlta:
+              type: string

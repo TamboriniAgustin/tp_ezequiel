@@ -7,9 +7,11 @@ import api.rest.turnos.model.swagger.RespuestaListaOrganizaciones;
 import api.rest.turnos.model.swagger.RespuestaOrganizacion;
 import api.rest.turnos.service.OrganizacionService;
 import api.rest.turnos.validator.OrganizacionValidator;
+import api.rest.turnos.wrapper.OrganizacionWrapper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,13 +80,13 @@ public class OrganizacionApiController implements OrganizacionApi {
     	//Se validan los datos de entrada
     	validatorOrganizacion.validateFilterData(filtro);
     	//Se ejecuta la lógica de negocio correspondiente a la petición
-    	Organizacion organization = serviceOrganizacion.getOrganizationByCuitOrName(filtro);
-    	log.info("[Mostrar organización] Organización {}(Cuit: {}) eliminada con éxito", organization.getNombre(), organization.getCuit());
+    	OrganizacionWrapper organizationWrapper = serviceOrganizacion.getOrganizationByCuitOrName(filtro);
+    	log.info("[Mostrar organización] Organización {}(Cuit: {}) eliminada con éxito", organizationWrapper.getOrganizacion().getNombre(), organizationWrapper.getOrganizacion().getCuit());
     	
     	RespuestaOrganizacion response = new RespuestaOrganizacion();
     	response.setStatus(new BigDecimal(200));
     	response.setDescripcion("Organización listada correctamente");
-    	response.setOrganizacion(organization);
+    	response.setOrganizacion(organizationWrapper.getResponseForRequest());
     	
         return new ResponseEntity<RespuestaOrganizacion>(response, HttpStatus.OK);
     }
@@ -97,13 +99,13 @@ public class OrganizacionApiController implements OrganizacionApi {
     	log.info("[Mostrar organizaciones] Se recibió una solicitud");
     	
     	//Se ejecuta la lógica de negocio correspondiente a la petición
-    	List<Organizacion> organizations = serviceOrganizacion.getOrganizations();
-    	log.info("[Mostrar organizaciones] {} organizaciones obtenidas con éxito", organizations.size());
+    	List<OrganizacionWrapper> organizationWrappers = serviceOrganizacion.getOrganizations();
+    	log.info("[Mostrar organizaciones] {} organizaciones obtenidas con éxito", organizationWrappers.size());
     	
     	RespuestaListaOrganizaciones response = new RespuestaListaOrganizaciones();
     	response.setStatus(new BigDecimal(200));
     	response.setDescripcion("Organizaciones listadas correctamente");
-    	response.setOrganizaciones(organizations);
+    	response.setOrganizaciones(organizationWrappers.stream().map(wrapper -> wrapper.getResponseForRequest()).collect(Collectors.toList()));
     	
         return new ResponseEntity<RespuestaListaOrganizaciones>(response, HttpStatus.OK);
     }

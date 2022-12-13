@@ -21,23 +21,15 @@ CREATE TABLE organizacion(
 	UNIQUE(email)
 );
 
-CREATE TABLE tipo_evento(
-	codigo INTEGER NOT NULL AUTO_INCREMENT,
-    descripcion VARCHAR(10),
-    PRIMARY KEY(codigo),
-    UNIQUE(descripcion)
-);
-
 CREATE TABLE evento(
 	cuit_organizacion VARCHAR(11),
 	nombre VARCHAR(20) NOT NULL,
     ubicacion VARCHAR(50) NOT NULL,
-    fecha_creacion DATETIME NOT NULL,
-    fecha_realizacion DATETIME,
-    tipo INTEGER,
+    fecha_creacion DATE NOT NULL,
+    fecha_realizacion DATETIME NOT NULL,
+    tipo INTEGER NOT NULL,
     PRIMARY KEY(cuit_organizacion, nombre),
-    FOREIGN KEY(cuit_organizacion) REFERENCES organizacion(cuit),
-    FOREIGN KEY(tipo) REFERENCES tipo_evento(codigo)
+    FOREIGN KEY(cuit_organizacion) REFERENCES organizacion(cuit)
 );
 
 CREATE TABLE usuario(

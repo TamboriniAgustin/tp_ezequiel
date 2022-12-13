@@ -2,7 +2,6 @@ package api.rest.turnos.model.swagger;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +12,22 @@ import javax.validation.Valid;
  * RespuestaListaOrganizaciones
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-11T00:45:19.203Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-13T03:59:09.308Z[GMT]")
 
 
 public class RespuestaListaOrganizaciones extends Respuesta  {
   @JsonProperty("organizaciones")
   @Valid
-  private List<Organizacion> organizaciones = null;
+  private List<OrganizacionConFechaAlta> organizaciones = null;
 
-  public RespuestaListaOrganizaciones organizaciones(List<Organizacion> organizaciones) {
+  public RespuestaListaOrganizaciones organizaciones(List<OrganizacionConFechaAlta> organizaciones) {
     this.organizaciones = organizaciones;
     return this;
   }
 
-  public RespuestaListaOrganizaciones addOrganizacionesItem(Organizacion organizacionesItem) {
+  public RespuestaListaOrganizaciones addOrganizacionesItem(OrganizacionConFechaAlta organizacionesItem) {
     if (this.organizaciones == null) {
-      this.organizaciones = new ArrayList<Organizacion>();
+      this.organizaciones = new ArrayList<OrganizacionConFechaAlta>();
     }
     this.organizaciones.add(organizacionesItem);
     return this;
@@ -40,11 +39,11 @@ public class RespuestaListaOrganizaciones extends Respuesta  {
    **/
   @Schema(description = "")
       @Valid
-    public List<Organizacion> getOrganizaciones() {
+    public List<OrganizacionConFechaAlta> getOrganizaciones() {
     return organizaciones;
   }
 
-  public void setOrganizaciones(List<Organizacion> organizaciones) {
+  public void setOrganizaciones(List<OrganizacionConFechaAlta> organizaciones) {
     this.organizaciones = organizaciones;
   }
 

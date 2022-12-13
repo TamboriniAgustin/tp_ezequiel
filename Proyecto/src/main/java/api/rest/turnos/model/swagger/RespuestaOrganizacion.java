@@ -2,7 +2,6 @@ package api.rest.turnos.model.swagger;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -11,14 +10,14 @@ import javax.validation.Valid;
  * RespuestaOrganizacion
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-11T00:45:19.203Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-13T03:59:09.308Z[GMT]")
 
 
 public class RespuestaOrganizacion extends Respuesta  {
   @JsonProperty("organizacion")
-  private Organizacion organizacion = null;
+  private OrganizacionConFechaAlta organizacion = null;
 
-  public RespuestaOrganizacion organizacion(Organizacion organizacion) {
+  public RespuestaOrganizacion organizacion(OrganizacionConFechaAlta organizacion) {
     this.organizacion = organizacion;
     return this;
   }
@@ -30,11 +29,11 @@ public class RespuestaOrganizacion extends Respuesta  {
   @Schema(description = "")
   
     @Valid
-    public Organizacion getOrganizacion() {
+    public OrganizacionConFechaAlta getOrganizacion() {
     return organizacion;
   }
 
-  public void setOrganizacion(Organizacion organizacion) {
+  public void setOrganizacion(OrganizacionConFechaAlta organizacion) {
     this.organizacion = organizacion;
   }
 
