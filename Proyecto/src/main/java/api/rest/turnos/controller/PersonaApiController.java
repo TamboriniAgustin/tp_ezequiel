@@ -8,10 +8,17 @@ import api.rest.turnos.model.swagger.RespuestaListaPersonas;
 import api.rest.turnos.model.swagger.RespuestaPersona;
 import api.rest.turnos.model.swagger.RespuestaPersonaRegistrada;
 import api.rest.turnos.model.swagger.Turno;
+import api.rest.turnos.service.EventoService;
 import api.rest.turnos.service.PersonaService;
+import api.rest.turnos.validator.EventoValidator;
 import api.rest.turnos.validator.PersonaValidator;
+import api.rest.turnos.validator.TurnoValidator;
+import api.rest.turnos.wrapper.EventoWrapper;
+import api.rest.turnos.wrapper.PersonaWrapper;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +34,13 @@ public class PersonaApiController implements PersonaApi {
     @Autowired
     private PersonaValidator validatorPersona;
     @Autowired
+    private EventoValidator validatorEvento;
+    @Autowired
+    private TurnoValidator validatorTurno;
+    @Autowired
     private PersonaService servicePersona;
+    @Autowired
+    private EventoService serviceEvento;
     
     /*
      * POST /persona: 
@@ -50,21 +63,87 @@ public class PersonaApiController implements PersonaApi {
     	
         return new ResponseEntity<RespuestaPersonaRegistrada>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * GET /persona/turno: 
+     * saca un turno a la persona para un evento
+    */
     public ResponseEntity<Respuesta> addTurn(String cuit, String evento, Turno body) {
-        return new ResponseEntity<Respuesta>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Sacar turno] Se recibió una solicitud");
+    	
+    	//Se validan los datos de entrada
+    	validatorEvento.validateEventData(cuit, evento);
+    	validatorTurno.validateTurnData(body);
+    	validatorPersona.validatePersonData(body.getPersona());
+    	log.info("[Sacar turno] Información del turno de {} validada correctamente", body.getPersona().getDni());
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	EventoWrapper eventWrapper = serviceEvento.getEvent(cuit, evento);
+    	servicePersona.addTurn(cuit, evento, body, eventWrapper);
+    	log.info("[Sacar turno] Se generó el turno al usuario {} con éxito", body.getPersona().getDni());
+    	
+    	Respuesta response = new Respuesta();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("El turno se agregó correctamente");
+    	
+        return new ResponseEntity<Respuesta>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * DELETE /persona: 
+     * baja la cuenta de una persona
+    */
     public ResponseEntity<Respuesta> deletePerson(String dni, String clave) {
-        return new ResponseEntity<Respuesta>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Eliminar persona] Se recibió una solicitud");
+    	
+    	//Se validan los datos de entrada
+    	validatorPersona.validatePersonData(dni, clave);
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	servicePersona.deletePerson(dni, clave);
+    	log.info("[Eliminar persona] Se desactivó la cuenta {} con éxito", dni);
+    	
+    	Respuesta response = new Respuesta();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("La persona se desactivó correctamente");
+    	
+        return new ResponseEntity<Respuesta>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * GET /persona/{dni}: 
+     * trae un usuario específico
+    */
     public ResponseEntity<RespuestaPersona> getPerson(String dni) {
-        return new ResponseEntity<RespuestaPersona>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Obtener persona] Se recibió una solicitud");
+    	
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	PersonaWrapper person = servicePersona.getPerson(dni);
+    	log.info("[Obtener persona] Se listó la persona {} con éxito", person.getPersona().getDni());
+    	
+    	RespuestaPersona response = new RespuestaPersona();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("Se listó la persona correctamente");
+    	response.setPersona(person.getPersona());
+    	
+        return new ResponseEntity<RespuestaPersona>(response, HttpStatus.OK);
     }
-
+    
+    /*
+     * GET /persona: 
+     * trae todos los usuarios, con la posibilidad de filtrar por apellido
+    */
     public ResponseEntity<RespuestaListaPersonas> getPersons(String apellido) {
-        return new ResponseEntity<RespuestaListaPersonas>(HttpStatus.NOT_IMPLEMENTED);
+    	log.info("[Obtener personas] Se recibió una solicitud");
+    	
+    	//Se ejecuta la lógica de negocio correspondiente a la petición
+    	List<PersonaWrapper> persons = servicePersona.getPersons(apellido);
+    	log.info("[Obtener personas] Se listaron {} personas con éxito", persons.size());
+    	
+    	RespuestaListaPersonas response = new RespuestaListaPersonas();
+    	response.setStatus(new BigDecimal(200));
+    	response.setDescripcion("Se listaron las personas activas correctamente");
+    	response.setPersonas(persons.stream().map(wrapper -> wrapper.getPersona()).collect(Collectors.toList()));
+    	
+        return new ResponseEntity<RespuestaListaPersonas>(response, HttpStatus.OK);
     }
     
     /*

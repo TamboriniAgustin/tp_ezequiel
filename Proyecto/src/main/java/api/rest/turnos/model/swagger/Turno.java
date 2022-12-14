@@ -18,9 +18,6 @@ public class Turno   {
   @JsonProperty("fecha")
   private String fecha = null;
 
-  @JsonProperty("hora")
-  private String hora = null;
-
   @JsonProperty("persona")
   private Persona persona = null;
 
@@ -41,25 +38,6 @@ public class Turno   {
 
   public void setFecha(String fecha) {
     this.fecha = fecha;
-  }
-
-  public Turno hora(String hora) {
-    this.hora = hora;
-    return this;
-  }
-
-  /**
-   * Get hora
-   * @return hora
-   **/
-  @Schema(description = "")
-  
-    public String getHora() {
-    return hora;
-  }
-
-  public void setHora(String hora) {
-    this.hora = hora;
   }
 
   public Turno persona(Persona persona) {
@@ -93,13 +71,12 @@ public class Turno   {
     }
     Turno turno = (Turno) o;
     return Objects.equals(this.fecha, turno.fecha) &&
-        Objects.equals(this.hora, turno.hora) &&
         Objects.equals(this.persona, turno.persona);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fecha, hora, persona);
+    return Objects.hash(fecha, persona);
   }
 
   @Override
@@ -108,7 +85,6 @@ public class Turno   {
     sb.append("class Turno {\n");
     
     sb.append("    fecha: ").append(toIndentedString(fecha)).append("\n");
-    sb.append("    hora: ").append(toIndentedString(hora)).append("\n");
     sb.append("    persona: ").append(toIndentedString(persona)).append("\n");
     sb.append("}");
     return sb.toString();

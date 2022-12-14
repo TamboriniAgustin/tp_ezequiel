@@ -16,9 +16,9 @@ import javax.validation.Valid;
 
 public class RespuestaPersona extends Respuesta  {
   @JsonProperty("persona")
-  private PersonaConClave persona = null;
+  private Persona persona = null;
 
-  public RespuestaPersona persona(PersonaConClave persona) {
+  public RespuestaPersona persona(Persona persona) {
     this.persona = persona;
     return this;
   }
@@ -30,11 +30,11 @@ public class RespuestaPersona extends Respuesta  {
   @Schema(description = "")
   
     @Valid
-    public PersonaConClave getPersona() {
+    public Persona getPersona() {
     return persona;
   }
 
-  public void setPersona(PersonaConClave persona) {
+  public void setPersona(Persona persona) {
     this.persona = persona;
   }
 

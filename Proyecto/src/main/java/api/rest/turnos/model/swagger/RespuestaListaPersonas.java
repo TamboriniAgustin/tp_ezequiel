@@ -19,16 +19,16 @@ import javax.validation.Valid;
 public class RespuestaListaPersonas extends Respuesta  {
   @JsonProperty("personas")
   @Valid
-  private List<PersonaConClave> personas = null;
+  private List<Persona> personas = null;
 
-  public RespuestaListaPersonas personas(List<PersonaConClave> personas) {
+  public RespuestaListaPersonas personas(List<Persona> personas) {
     this.personas = personas;
     return this;
   }
 
-  public RespuestaListaPersonas addPersonasItem(PersonaConClave personasItem) {
+  public RespuestaListaPersonas addPersonasItem(Persona personasItem) {
     if (this.personas == null) {
-      this.personas = new ArrayList<PersonaConClave>();
+      this.personas = new ArrayList<Persona>();
     }
     this.personas.add(personasItem);
     return this;
@@ -40,11 +40,11 @@ public class RespuestaListaPersonas extends Respuesta  {
    **/
   @Schema(description = "")
       @Valid
-    public List<PersonaConClave> getPersonas() {
+    public List<Persona> getPersonas() {
     return personas;
   }
 
-  public void setPersonas(List<PersonaConClave> personas) {
+  public void setPersonas(List<Persona> personas) {
     this.personas = personas;
   }
 

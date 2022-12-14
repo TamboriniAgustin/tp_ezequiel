@@ -37,4 +37,16 @@ public class EventoValidator {
 			throw new EntradaInvalidaException("El nombre no puede ser vacío o nulo");
 		}
 	}
+	
+	//Valida que se haya ingresado un nombre de evento y un cuit para identificarlo
+	public void validateEventData(String organizationCuit, String eventName) {
+		//CUIT
+		if(ValidationUtils.stringEmptyOrNull(organizationCuit)) {
+			throw new EntradaInvalidaException("El CUIT no puede ser vacío o nulo");
+		}
+		//Nombre
+		if(ValidationUtils.stringEmptyOrNull(eventName)) {
+			throw new EntradaInvalidaException("El nombre no puede ser vacío o nulo");
+		}
+	}
 }

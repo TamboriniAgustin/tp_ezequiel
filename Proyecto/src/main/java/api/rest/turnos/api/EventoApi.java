@@ -58,8 +58,8 @@ public interface EventoApi {
         @ApiResponse(responseCode = "404", description = "No hay turnos registrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Respuesta.class))),
         @ApiResponse(responseCode = "500", description = "Error del servidor", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Respuesta.class))) 
     })
-    @RequestMapping(value = "/evento/{cuit}/turnos", produces = { "application/json" }, method = RequestMethod.GET)
-    ResponseEntity<RespuestaTurnos> getTurns(@Parameter(in = ParameterIn.PATH, description = "cuit de la organizacion", required=true, schema=@Schema()) @PathVariable("cuit") String cuit, @Parameter(in = ParameterIn.QUERY, description = "estado del turno" ,schema=@Schema()) @Valid @RequestParam(value = "activo", required = false) Boolean activo);
+    @RequestMapping(value = "/evento/{cuit}/{nombreEvento}/turnos", produces = { "application/json" }, method = RequestMethod.GET)
+    ResponseEntity<RespuestaTurnos> getTurns(@Parameter(in = ParameterIn.PATH, description = "cuit de la organizacion", required=true, schema=@Schema()) @PathVariable("cuit") String cuit, @Parameter(in = ParameterIn.PATH, description = "nombre del evento", required=true, schema=@Schema()) @PathVariable("nombreEvento") String nombreEvento, @Parameter(in = ParameterIn.QUERY, description = "estado del turno" ,schema=@Schema()) @Valid @RequestParam(value = "activo", required = false) Boolean activo);
 
 
     @Operation(summary = "Modifica un evento", description = "", tags={ "evento" })

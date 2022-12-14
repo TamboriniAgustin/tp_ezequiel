@@ -345,7 +345,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Respuesta'
-  /evento/{cuit}/turnos:
+  /evento/{cuit}/{nombreEvento}/turnos:
     get:
       tags:
         - evento
@@ -355,6 +355,12 @@ paths:
         - name: cuit
           in: path
           description: cuit de la organizacion
+          required: true
+          schema:
+            type: string
+        - name: nombreEvento
+          in: path
+          description: nombre del evento
           required: true
           schema:
             type: string
@@ -664,8 +670,6 @@ components:
       properties:
         fecha:
           type: string
-        hora:
-          type: string
         persona:
           $ref: '#/components/schemas/Persona'
     Respuesta:
@@ -690,14 +694,14 @@ components:
         personas:
           type: array
           items:  
-            $ref: '#/components/schemas/PersonaConClave'
+            $ref: '#/components/schemas/Persona'
     RespuestaPersona:
       type: object
       allOf:
         - $ref: '#/components/schemas/Respuesta'
       properties:
         persona:
-          $ref: '#/components/schemas/PersonaConClave'
+          $ref: '#/components/schemas/Persona'
     RespuestaTurnos:
       type: object
       allOf:

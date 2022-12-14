@@ -47,7 +47,9 @@ CREATE TABLE turno(
     evento_nombre VARCHAR(20) NOT NULL,
     fecha DATETIME,
     dni_persona VARCHAR(8) NOT NULL,
-    clave VARCHAR(40) NOT NULL,
+	nombre_persona VARCHAR(40) NOT NULL,
+	apellido_persona VARCHAR(40) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(evento_organizacion, evento_nombre) REFERENCES evento(cuit_organizacion, nombre)
+    FOREIGN KEY(evento_organizacion, evento_nombre) REFERENCES evento(cuit_organizacion, nombre),
+	UNIQUE(evento_organizacion, evento_nombre, fecha);
 );
